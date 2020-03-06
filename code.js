@@ -28,7 +28,9 @@ function preload() {
 // setup functie voor het maken van canvas en zetten van framerate
 function setup() {
     frameRate(60);
-    createCanvas(w,h);
+    let cnv = createCanvas(w,h);
+    cnv.style('height: 100%');
+    cnv.style('width : auto');
 }
 // player class, dit is de speler, deze heeft een aantal waardes die bij de speler horen in de constructor, ook heeft deze een show functie die de speler laat zien,
 // een update functie die de speler naar beneden laat vallen, een up functie om de speler omhoog te duwen, en een aantal functies om te berekenen of de speler een ander object raakt.
@@ -916,7 +918,7 @@ mouseClicked = function() {
                 selectingOrBuying = true;
                 break;
             }
-            if (shopItems[i].buying && (mouseX > w/2-w/6/2 && mouseX < w/2+w/12) && (mouseY > (h/2+h/9-h/40) && mouseY < (h/2+h/9+h/40)) && totalScore > shopItems[i].price) {
+            if (shopItems[i].buying && (mouseX > w/2-w/6/2 && mouseX < w/2+w/12) && (mouseY > (h/2+h/9-h/40) && mouseY < (h/2+h/9+h/40)) && totalScore >= shopItems[i].price) {
                 shopItems[i].unlocked = true;
                 totalScore -= shopItems[i].price;
                 shopItems[i].buying = false;
@@ -973,7 +975,7 @@ let obstacles = [
     {}
 ];
 createObstacle(obstacles[2], -350);
-// het aanmaken van de shopitems, deze haalt hij vanuit de localstorage, mocht dit er nog niet in staan wordt het naar false gezet en dan aangemaakt
+// het aanmaken van de shopitems, deze wordt gehaald vanuit de localstorage, mocht dit er nog niet in staan wordt het naar false gezet en dan aangemaakt
 let shopItems = JSON.parse(localStorage.getItem("shopItems") || "false");
 if (!shopItems) {
     shopItems = [new ShopItem((w-(w/10))/3, h/1.5 - 150, colorPacks[0], 25,true, true)];
@@ -989,7 +991,7 @@ if (!shopItems) {
 for (let i = 0; i < shopItems.length; i++) {
     shopItems[i] = Object.assign(new ShopItem(), shopItems[i]);
     shopItems[i].colors = colorPacks[i];
-    // zodat altijd de eerste alleen selected is bij opstarten.
+    // zodat altijd de eerste selected is bij opstarten.
     shopItems[i].selected = false;
     shopItems[0].selected = true;
 }
@@ -1000,6 +1002,8 @@ let totalScore = JSON.parse(localStorage.getItem("totalScore") || "0");
 function draw() {
     background(40);
     if (gamestate === 0) { // thuisscherm
+        colorSwitchLogoMenu = new ColorSwitchLogo(200,75);        
+        colorSwitchLogoGame = new ColorSwitchLogo(200, 300);
         for(let i = 0; i < homeCircle3.length; i++ ) {
             homeCircle3[i].show();
             homeCircle3[i].update();
@@ -1015,6 +1019,7 @@ function draw() {
         playButton();
         colorSwitchLogoMenu.show();
         shopButton(w/2,h*0.85,100);
+
     }
     if (gamestate === 1 || gamestate === 2) { // het bewegen en tekenen van de verschillende obstakels en andere game elementen
         colorSwitchLogoGame.show();
