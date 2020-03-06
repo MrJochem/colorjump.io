@@ -28,9 +28,9 @@ function preload() {
 // setup functie voor het maken van canvas en zetten van framerate
 function setup() {
     frameRate(60);
-    let cnv = createCanvas(w,h);
-    cnv.style('height: 100%');
-    cnv.style('width : auto');
+    let canvas = createCanvas(w,h);
+    canvas.style('height: 100%');
+    canvas.style('width : auto');
 }
 // player class, dit is de speler, deze heeft een aantal waardes die bij de speler horen in de constructor, ook heeft deze een show functie die de speler laat zien,
 // een update functie die de speler naar beneden laat vallen, een up functie om de speler omhoog te duwen, en een aantal functies om te berekenen of de speler een ander object raakt.
@@ -675,7 +675,7 @@ class ShopItem {
     }
 }
 // dit is het logo dat gebruikt wordt als cosmetica in de menu's en tijdens het begin van het spel.
-class ColorSwitchLogo {
+class ColorJumpLogo {
     constructor(x,y) {
         this.x = x;
         this.y = y;
@@ -690,7 +690,7 @@ class ColorSwitchLogo {
         text("C", this.x - 60, this.y - 20);
         text("L", this.x + 5, this.y - 20);
         text("R", this.x + 62.5, this.y - 20);
-        text("SWITCH", this.x, this.y + 20);
+        text("JUMP", this.x, this.y + 20);
         for (let i = 0; i < this.O1.length; i++) {
             this.O1[i].show();
             this.O1[i].update();
@@ -876,6 +876,11 @@ mousePressed = function() {
         player.up();
     }
 }
+touchStarted = function() {
+    if (gamestate === 1) {
+        player.up();
+    }
+}
 // interactiviteit met toetsen, in dit geval alleen met spatiebalk om het spel te beginnen of herstarten
 keyPressed = function() {
     if(keyCode == 32) {
@@ -927,6 +932,12 @@ mouseClicked = function() {
                 }
                 shopItems[i].selected = true;
                 colors = shopItems[i].colors;
+                shopLogo = new ShopLogo(w/2,h*0.1);
+                colorJumpLogoGame = new ColorJumpLogo(200, 300);
+                colorJumpLogoMenu = new ColorJumpLogo(200,75);
+                homeCircle1 = createCircle(w/2,h/2, 175, -1, 20);
+                homeCircle2 = createCircle(w/2,h/2, 210, 1, 30);
+                homeCircle3 = createCircle(w/2,h/2, 255, -1, 40);
                 selectingOrBuying = false;
                 break;
             } 
@@ -941,6 +952,12 @@ mouseClicked = function() {
                 }
                 shopItems[i].selected = true;
                 colors = shopItems[i].colors;
+                shopLogo = new ShopLogo(w/2,h*0.1);
+                colorJumpLogoGame = new ColorJumpLogo(200, 300);
+                colorJumpLogoMenu = new ColorJumpLogo(200,75);
+                homeCircle1 = createCircle(w/2,h/2, 175, -1, 20);
+                homeCircle2 = createCircle(w/2,h/2, 210, 1, 30);
+                homeCircle3 = createCircle(w/2,h/2, 255, -1, 40);
                 shopItems[i].selecting = false;
                 selectingOrBuying = false;
                 break;
@@ -960,8 +977,8 @@ let points = [];
 let player = new Player();
 let playerDeathCircles = false;
 let counter = 0;
-let colorSwitchLogoMenu = new ColorSwitchLogo(200,75);
-let colorSwitchLogoGame = new ColorSwitchLogo(200, 300);
+let colorJumpLogoGame = new ColorJumpLogo(200, 300);
+let colorJumpLogoMenu = new ColorJumpLogo(200,75);
 let shopLogo = new ShopLogo(w/2,h*0.1);
 let bottomHand = new BottomHand();
 let score = 0;
@@ -1001,9 +1018,7 @@ let totalScore = JSON.parse(localStorage.getItem("totalScore") || "0");
 // draw functie voor al het animeren
 function draw() {
     background(40);
-    if (gamestate === 0) { // thuisscherm
-        colorSwitchLogoMenu = new ColorSwitchLogo(200,75);        
-        colorSwitchLogoGame = new ColorSwitchLogo(200, 300);
+    if (gamestate === 0) { // thuisscherm     
         for(let i = 0; i < homeCircle3.length; i++ ) {
             homeCircle3[i].show();
             homeCircle3[i].update();
@@ -1017,12 +1032,12 @@ function draw() {
             homeCircle1[i].update();
         }
         playButton();
-        colorSwitchLogoMenu.show();
+        colorJumpLogoMenu.show();
         shopButton(w/2,h*0.85,100);
 
     }
     if (gamestate === 1 || gamestate === 2) { // het bewegen en tekenen van de verschillende obstakels en andere game elementen
-        colorSwitchLogoGame.show();
+        colorJumpLogoGame.show();
         bottomHand.show();
         for (let i = 0; i < obstacles.length; i++) {
             for (let j = 0; j < obstacles[i].obstacle.length; j++) {
@@ -1092,7 +1107,7 @@ function draw() {
             }
         }
         bottomHand.screenUpdate(player);
-        colorSwitchLogoGame.screenUpdate(player);
+        colorJumpLogoGame.screenUpdate(player);
         for (let i = 0; i < obstacles.length; i++) {
             for (let j = 0; j < obstacles[i].obstacle.length; j++) {
                 if (obstacles[i].type === "line" || obstacles[i].type === "circleDiamondEllipses" || obstacles[i].type === "doubleCross") {
@@ -1165,7 +1180,7 @@ function draw() {
             {}
         ];
         createObstacle(obstacles[2], -350);
-        colorSwitchLogoGame = new ColorSwitchLogo(200, 300);
+        colorJumpLogoGame = new ColorJumpLogo(200, 300);
         bottomHand = new BottomHand();
         rectMode(CORNER);
         fill(65);
@@ -1181,7 +1196,7 @@ function draw() {
         text(bestScore, 200, 300);
         retryButton();
         backHomeButton();
-        colorSwitchLogoMenu.show();
+        colorJumpLogoMenu.show();
         shopButton(w*0.87,h*0.1,60);
         image(pointImage, w/2, h * 0.8, 30,30);
         textSize(40);
