@@ -874,16 +874,10 @@ function createObstacle(obstacle, previousObstacleHighestY, number) {
     }
 }
 // interactiviteit met muis
-mousePressed = function() {
+function mousePressed() {
+    if (event.type != 'touchstart') return true
     if (gamestate === 1) {
         player.up();
-    }
-}
-let touch = true;
-touchStarted = function() {
-    if (touch) {
-        player.up();
-        touch = false;
     }
 }
 // interactiviteit met toetsen, in dit geval alleen met spatiebalk om het spel te beginnen of herstarten
@@ -1168,7 +1162,7 @@ function draw() {
     } 
         if(counter >= 90) {
             gamestate = 3;
-            bestScore = Math.max(score, JSON.parse(localStorage.getItem("bestScore")));
+            bestScore = Math.max(score, parseInt(localStorage.getItem("bestScore")));
             localStorage.setItem("bestScore", JSON.stringify(bestScore));
             totalScore += score;
             localStorage.setItem("totalScore",JSON.stringify(totalScore));
