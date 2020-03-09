@@ -879,9 +879,11 @@ mousePressed = function() {
         player.up();
     }
 }
+let touch = true;
 touchStarted = function() {
-    if (gamestate === 1) {
+    if (touch) {
         player.up();
+        touch = false;
     }
 }
 // interactiviteit met toetsen, in dit geval alleen met spatiebalk om het spel te beginnen of herstarten
