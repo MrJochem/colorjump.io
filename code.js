@@ -29,11 +29,13 @@ function preload() {
 function setup() {
     frameRate(60);
     let canvas = createCanvas(w,h);
-    canvas.style('height: 100%');
-    canvas.style('width : auto');
-    canvas.style('border-left: solid');
-    canvas.style('border-right: solid');
-    canvas.style('borderWidth: 10px');
+    if (windowHeight/windowWidth > 1.5) {
+        canvas.style('width:100%')
+        canvas.style('height:auto');
+    } else {
+        canvas.style('height: 100%');
+        canvas.style('width : auto');
+    }
 }
 // player class, dit is de speler, deze heeft een aantal waardes die bij de speler horen in de constructor, ook heeft deze een show functie die de speler laat zien,
 // een update functie die de speler naar beneden laat vallen, een up functie om de speler omhoog te duwen, en een aantal functies om te berekenen of de speler een ander object raakt.
@@ -1162,7 +1164,7 @@ function draw() {
     } 
         if(counter >= 90) {
             gamestate = 3;
-            bestScore = Math.max(score, parseInt(localStorage.getItem("bestScore")));
+            bestScore = Math.max(score, parseInt(localStorage.getItem("bestScore") || "0"));
             localStorage.setItem("bestScore", JSON.stringify(bestScore));
             totalScore += score;
             localStorage.setItem("totalScore",JSON.stringify(totalScore));
