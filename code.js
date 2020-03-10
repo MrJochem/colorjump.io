@@ -43,7 +43,8 @@ function setup() {
             player.up();
         }
     }
-    document.getElementById("canvas").onclick = function() {
+    document.getElementById("canvas").onmousedown = function() {
+        if (event.type != 'touchstart') return true
         if (gamestate === 1) {
             player.up();
         }
