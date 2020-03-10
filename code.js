@@ -38,10 +38,15 @@ function setup() {
     }
     canvas.id("canvas");
     document.getElementById("canvas").ontouchstart = function() {
-        player.up();
+        if (event.type != 'touchstart') return true
+        if (gamestate === 1) {
+            player.up();
+        }
     }
     document.getElementById("canvas").onclick = function() {
-        player.up();
+        if (gamestate === 1) {
+            player.up();
+        }
     }
 }
 // player class, dit is de speler, deze heeft een aantal waardes die bij de speler horen in de constructor, ook heeft deze een show functie die de speler laat zien,
