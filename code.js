@@ -36,6 +36,13 @@ function setup() {
         canvas.style('height: 100%');
         canvas.style('width : auto');
     }
+    canvas.id("canvas");
+    document.getElementById("canvas").ontouchstart = function() {
+        player.up();
+    }
+    document.getElementById("canvas").onclick = function() {
+        player.up();
+    }
 }
 // player class, dit is de speler, deze heeft een aantal waardes die bij de speler horen in de constructor, ook heeft deze een show functie die de speler laat zien,
 // een update functie die de speler naar beneden laat vallen, een up functie om de speler omhoog te duwen, en een aantal functies om te berekenen of de speler een ander object raakt.
@@ -76,7 +83,7 @@ class Player {
         this.velocity += this.lift;
     }
     intersects(other) {
-        if (getDistance (this.x, this.y, other.x, other.y) < this.size/2 + other.size/2) {
+        if (getDistance(this.x, this.y, other.x, other.y) < this.size/2 + other.size/2) {
             return true;
         } else {
             return false;
@@ -800,7 +807,7 @@ function getDistance(x1, y1, x2, y2) {
     return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
 }
 // deze functie is bedoeld om een obstakel te creëren in de array met obstakels of er eentje aan te passen.
-function createObstacle(obstacle, previousObstacleHighestY, number) {
+function createObstacle(obstacle, previousObstacleHighestY) {
     let randomNumber = floor(random(0,13));
     let y = previousObstacleHighestY
     if (randomNumber === 0) {
@@ -876,12 +883,12 @@ function createObstacle(obstacle, previousObstacleHighestY, number) {
     }
 }
 // interactiviteit met muis
-function mousePressed() {
-    if (event.type != 'touchstart') return true
-    if (gamestate === 1) {
-        player.up();
-    }
-}
+// function mousePressed() {
+//     if (event.type != 'touchstart') return true
+//     if (gamestate === 1) {
+//         player.up();
+//     }
+// }
 // interactiviteit met toetsen, in dit geval alleen met spatiebalk om het spel te beginnen of herstarten
 keyPressed = function() {
     if(keyCode == 32) {
@@ -927,6 +934,7 @@ mouseClicked = function() {
             if (shopItems[i].buying && (mouseX > w/2-w/6/2 && mouseX < w/2+w/12) && (mouseY > (h/2+h/9-h/40) && mouseY < (h/2+h/9+h/40)) && totalScore >= shopItems[i].price) {
                 shopItems[i].unlocked = true;
                 totalScore -= shopItems[i].price;
+                localStorage.setItem("totalScore",JSON.stringify(totalScore));
                 shopItems[i].buying = false;
                 for (let j = 0; j < shopItems.length;j++) {
                     shopItems[j].selected = false;
@@ -1047,7 +1055,6 @@ function draw() {
                         obstacles[i].obstacle[j][k].show();
                         obstacles[i].obstacle[j][k].update();
                         if (obstacles[i].obstacle[floor(obstacles[i].obstacle.length/2)][k].centerY > h + obstacles[i].height + 150) {
-                            console.log(obstacles[i]);
                             if (i === 0 && (obstacles[obstacles.length - 1].type == "line" || obstacles[obstacles.length - 1].type == "circleDiamondEllipses" || obstacles[obstacles.length -1].type == "doubleCross")) {
                                 createObstacle(obstacles[i], int(obstacles[obstacles.length-1].obstacle[floor(obstacles[obstacles.length-1].obstacle.length/2)][0].centerY - obstacles[obstacles.length-1].height));
                             } else if (i === 0) {
@@ -1063,7 +1070,6 @@ function draw() {
                     obstacles[i].obstacle[j].show();
                     obstacles[i].obstacle[j].update();
                     if (obstacles[i].obstacle[j].centerY > h + obstacles[i].height + 50) {
-                        console.log(obstacles[i]);
                         if (i === 0 && (obstacles[obstacles.length - 1].type == "line" || obstacles[obstacles.length - 1].type == "circleDiamondEllipses" || obstacles[obstacles.length - 1].type == "doubleCross")) {
                             createObstacle(obstacles[i], int(obstacles[obstacles.length-1].obstacle[floor(obstacles[obstacles.length-1].obstacle.length/2)][0].centerY - obstacles[obstacles.length-1].height));
                         } else if (i === 0) {
