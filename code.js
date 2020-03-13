@@ -37,6 +37,7 @@ function setup() {
         canvas.style('width : auto');
     }
     canvas.id("canvas");
+    //interactiviteit met muis en touchscreen
     document.getElementById("canvas").addEventListener("ontouchdown", function() {
         if (event.type != 'touchstart') return true
         if (gamestate === 1) {
@@ -44,7 +45,6 @@ function setup() {
         }
     }, false)
     document.getElementById("canvas").addEventListener("mousedown", function() {
-        // if (event.type != 'touchstart') return true
         if (gamestate === 1) {
             player.up();
         }
@@ -888,13 +888,6 @@ function createObstacle(obstacle, previousObstacleHighestY) {
         obstacle.obstacle = createCircleDiamondEllipsesObstacle( y - 150 - obstacle.height);
     }
 }
-// interactiviteit met muis
-// function mousePressed() {
-//     if (event.type != 'touchstart') return true
-//     if (gamestate === 1) {
-//         player.up();
-//     }
-// }
 // interactiviteit met toetsen, in dit geval alleen met spatiebalk om het spel te beginnen of herstarten
 keyPressed = function() {
     if(keyCode == 32) {
